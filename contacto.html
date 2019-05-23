@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Validación de formulario</title>
+    <!-- enlazo hoja de estilo y librerias js de Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <!-- ESTOS SON LOS ENLACES DEL DATE PICKER CONTROL -->
+    <script type="text/javascript" src="datepickercontrol.js"></script>
+    <link type="text/css" rel="stylesheet" href="datepickercontrol.css"> 
+ 
+  <style>
+       small {visibility:hidden;}
+    </style>
+    <script>
+       function validar(){   // Validación de datos
+        // datos a validar 
+        var nombre=document.getElementById("nombre").value;
+        var apellidos=document.getElementById("apellidos").value;
+        var Email=document.getElementById("Email").value;
+       
+        var fecha=document.getElementById("DPC_fechaNacimiento_DD/MM/YYYY").value;
+        var provincia=document.getElementById("provincia").value;
+       // var aceptar=document.getElementById("aceptar").value;
+       /* OJO  LA CASILLA DE VERIFICACIÓN SE COMPRUEBA DIRECTAMENTE
+          SIN EXTRAER UN VALUE */
+        var valido=true; // si todo va bien después de todas las comprobaciones, sigue a true
+        // CONTROLES DE VALIDACIÓN:
+        // El nombre ha sido introducido, y no a espacios en blanco o números
+        if (nombre.length==0||parseInt(nombre)){
+            document.getElementById("nombreHelp").style.visibility="visible";
+            valido=false;
+        }
+        // Los apellidos han sido introducidos, y no a espacios en blanco o números
+        if (apellidos.length==0||parseInt(apellidos)){
+            document.getElementById("apellidosHelp").style.visibility="visible";
+            valido=false;
+        }
+
+        if (Email.length==0){
+            document.getElementById("EmailHelp").style.visibility="visible";
+            valido=false;
+        }
+       
+        
+        // La fecha no puede estar vacía
+        if (fecha==""){
+            document.getElementById("fechaNacimientoHelp").style.visibility="visible";
+            valido=false;
+        }
+        // La provincia no puede ser 0 (no haber elegido ninguna)
+        if (provincia==0){ 
+            document.getElementById("provinciaHelp").style.visibility="visible";
+            valido=false;
+        }
+        // Es obligatorio haber marcado la casilla 
+        if (!aceptar.checked){
+            document.getElementById("aceptarHelp").style.visibility="visible";
+            valido=false;
+        }
+         return valido;  // devuelve false si alguna comprobación ha fallado
+       }
+
+       function quitarError(msg){
+        // Cada vez que se camibia un campo, se elimina mensaje de error
+         document.getElementById(msg).style.visibility="hidden";
+       }
+       
+       function limpiarResultado(){
+        // Cada vez que se pulsa el botón submit, se elimina el resultado anterior
+         document.getElementById('resultado').innerHTML="";
+       }
+    </script>
+  </head>
+<body>
+  <div class="container ">
+    <form class="border border-primary mt-3 p-3" method="POST" action="" onsubmit="return validar();">
+     <h1 class="text-center ">Contacto</h1>
+     <h2 class="text-center ">Introducción de datos</h2>  
+     <hr>
+     <div class="row"> <!-- Grid responsive dentro del container -->
+        <div class="mx-auto col-lg-6 col-sm-12">
+            <div class="form-group">
+              <label for="nombre">Nombre:(*) </label>
+              <input type="input" class="form-control" id="nombre"  placeholder="Introduce nombre" onchange="quitarError('nombreHelp')">
+              <small id="nombreHelp" class="form-text text-danger">Campo alfanumérico y obligatorio</small>
+            </div>
+            <div class="form-group">
+              <label for="apellidos">Apellidos:(*) </label>
+              <input type="input" class="form-control" id="apellidos"  placeholder="Introduce apellidos" onchange="quitarError('apellidosHelp')">
+              <small id="apellidosHelp" class="form-text text-danger">Campo alfanumérico y obligatorio</small>
+            </div>
+
+            <div class="form-group">
+                <label for="nombre">Email:(*) </label>
+                <input type="input" class="form-control" id="Email"  placeholder="Introduce Email" onchange="quitarError('EmailHelp')">
+                <small id="EmailHelp" class="form-text text-danger">Campo alfanumérico y obligatorio</small>
+              </div>
+        
+    
+            <div class="form-group">
+              <label for="fechaIngreso">Fecha Nacimiento:(*) </label>
+              <input type="text" class="form-control" id="DPC_fechaNacimiento_DD/MM/YYYY"  placeholder="Introduce fecha nacimiento" onchange="quitarError('fechaNacimientoHelp')">
+              <small id="fechaNacimientoHelp" class="form-text text-danger">Fecha obligatoria</small>
+            </div>
+
+            <div class="form-group">
+              <label for="provincia">Provincia:(*)</label>
+              <select class="form-control" id="provincia" onchange="quitarError('provinciaHelp')">
+                  <option value="0">--Elija provincia</option>
+                  <option value="1">Málaga</option>
+                  <option value="2">Granada</option>
+                  <option value="3">Cadiz</option>
+                  <option value="4">Almería</option>
+                  <option value="5">Sevilla</option>
+                  <option value="6">Cordoba</option>
+                  <option value="7">Jaen</option>
+                  <option value="8">Huelva</option>
+              </select>
+              <small id="provinciaHelp" class="form-text text-danger">Debe elegir provincia</small>
+            </div>
+            <div class="form-group form-check">
+                <input type="checkbox" class="form-check-input mt-5 pt-5" id="aceptar" onchange="quitarError('aceptarHelp')">
+                <label class="form-check-label  pt-5 ml-2" for="aceptar"><a href="" data-toggle="modal" data-target="#confidencialidad">Acepto la política de confidencialidad</a></label>
+                <small id="aceptarHelp" class="form-text text-danger">Es obligatorio marcar esta casilla</small>    
+            </div>
+            <!-- Modal de Bootstrap -->
+      <div class="modal fade" id="confidencialidad" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalScrollableTitle">Política de confidencialidad</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <!-- aquí va el texto de la política de confidencialidad -->
+              La politica de confidencialidad va sobre ......
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+            <button type="submit" class="btn btn-primary " onclick="validar()">Enviar</button>
+    </div>
+   
+ 
+      </div>
+    </form>
+    
+    </div>
+    </div>
+  </div>
+    
+</body>
+</html>
